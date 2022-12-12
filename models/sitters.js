@@ -36,7 +36,6 @@ const sitterSchema = mongoose.Schema({
   gender: String,
   userBio: String,
   userPhoto: String,
-  userCity: String,
   userAddress: [userAddressSchema],
   active: Boolean,
   equipment: String,
