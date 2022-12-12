@@ -49,4 +49,4 @@ const sitterSchema = mongoose.Schema({
 
 const Sitter = mongoose.model("sitters", sitterSchema);
 
-module.exports = User;
+module.exports = Sitter;
