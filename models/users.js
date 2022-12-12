@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const userAddressSchema = mongoose.Schema({
   cityName: String,
+  zipCode: String,
   latitude: Number,
   longitude: Number,
 });
@@ -23,7 +24,6 @@ const userSchema = mongoose.Schema({
   userPhoto: String,
   userCity: String,
   userAddress: [userAddressSchema],
-  userZipCode: Number,
   active: Boolean,
   reviews: [reviewSchema],
   profileStatus: [String],
