@@ -9,7 +9,7 @@ const uid2 = require("uid2");
 
 //route d'inscription
 router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["firstName", "username", "email", "password"])) {
+  if (!checkBody(req.body, ["lastName", "firstName", "email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
@@ -22,20 +22,27 @@ router.post("/signup", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newUser = new User({
-        lastname: req.body.lastname,
+        lastName: req.body.lastname,
         firstName: req.body.firstName,
         email: req.body.email,
         password: hash,
         token: uid2(32),
-        phoneNumber: null,
-        gender: null,
-        userBio: "cest moi lucas",
-        userPhoto: null,
-        userCity: "marseille",
-        userAddress: ["106 av de la corse"],
-        active: null,
-        reviews: [null],
-        profileStatus: [null],
+        phoneNumber: 0,
+        gender: "",
+        userBio: "",
+        userPhoto: "",
+        userAddress: {
+          cityName: "",
+          zipCode: "",
+          latitude: 0,
+          longitude: 0,
+        },
+        active: true,
+        reviews: {
+          reviewNote: 10,
+          reviewText: "",
+        },
+        profileStatus: [""],
       });
 
       newUser.save().then((newDoc) => {
@@ -56,14 +63,13 @@ router.post("/signin", (req, res) => {
   }
 
   User.findOne({
-    username: { $regex: new RegExp(req.body.username, "i") },
+    email: { $regex: new RegExp(req.body.email, "i") },
   }).then((data) => {
     if (bcrypt.compareSync(req.body.password, data.password)) {
       res.json({
         result: true,
         token: data.token,
-        username: data.username,
-        firstName: data.firstName,
+        email: data.email,
       });
     } else {
       res.json({ result: false, error: "User not found or wrong password" });
