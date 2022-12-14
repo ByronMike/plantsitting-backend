@@ -43,7 +43,7 @@ const sitterSchema = mongoose.Schema({
   tarifs: [tarifSchema],
   rib: String,
   reviews: [reviewSchema],
-  status: [Boolean],
+  status: String,
 });
 
 const Sitter = mongoose.model("sitters", sitterSchema);
