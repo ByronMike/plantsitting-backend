@@ -9,6 +9,7 @@ const uid2 = require("uid2");
 
 //route d'inscription
 router.post("/signup", (req, res) => {
+  console.log("req.body", req.body);
   if (!checkBody(req.body, ["lastName", "firstName", "email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
@@ -23,17 +24,21 @@ router.post("/signup", (req, res) => {
 
       const newUser = new User({
         lastName: req.body.lastname,
-        firstName: req.body.firstName,
+        firstName: req.body.firstname,
         email: req.body.email,
         password: hash,
         token: uid2(32),
+<<<<<<< HEAD
         phoneNumber: req.body.phonenumber,
+=======
+        phoneNumber: Number(req.body.phoneNumber),
+>>>>>>> assessment
         gender: "",
         userBio: "",
         userPhoto: "",
         userAddress: {
           cityName: "",
-          zipCode: req.body.zipCode,
+          zipCode: req.body.zipcode,
           latitude: 0,
           longitude: 0,
         },
@@ -46,6 +51,7 @@ router.post("/signup", (req, res) => {
       });
 
       newUser.save().then((newDoc) => {
+        console.log("newDoc", newDoc);
         res.json({ result: true, token: newDoc.token });
       });
     } else {
@@ -57,6 +63,7 @@ router.post("/signup", (req, res) => {
 
 //route de connexion
 router.post("/signin", (req, res) => {
+  console.log(req.body);
   if (!checkBody(req.body, ["email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
