@@ -7,9 +7,9 @@ const { checkBody } = require("../modules/checkBody");
 const bcrypt = require("bcrypt");
 const uid2 = require("uid2");
 
-//route d'inscription d'un plant-sitter
+//Route d'inscription d'un plant-sitter
 router.post("/signup", (req, res) => {
-  if (!checkBody(req.body, ["lastName", "firstName", "email", "password"])) {
+  if (!checkBody(req.body, ["lastname", "firstname", "email", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
@@ -23,19 +23,19 @@ router.post("/signup", (req, res) => {
 
       const newSitter = new Sitter({
         company: "myCompanyName",
-        lastName: req.body.lastname,
-        firstName: req.body.firstname,
+        lastname: req.body.lastname,
+        firstname: req.body.firstname,
         email: req.body.email,
         password: hash,
         token: uid2(32),
-        phoneNumber: req.body.phonenumber,
+        phonenumber: req.body.phonenumber,
         gender: "Mr",
         userBio:
           "Depuis 2011 je suis passioné de plantes exotiques et surtout la combination avec des fleurs et plantes vivaces.",
-        userPhoto: "",
-        userAddress: {
-          cityName: "Marseille",
-          zipCode: 13001,
+        userphoto: "",
+        useraddress: {
+          cityname: "Marseille",
+          zipcode: 13001,
           latitude: 45.751036,
           longitude: 4.840246,
         },
@@ -53,8 +53,8 @@ router.post("/signup", (req, res) => {
           tarif3: 18,
         },
         reviews: {
-          reviewNote: 10,
-          reviewText: "Top",
+          reviewnote: 10,
+          reviewtext: "Top",
         },
         rib: "mon rib",
         status: "Plant-Sitter professionnel",

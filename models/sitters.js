@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-const userAddressSchema = mongoose.Schema({
-  cityName: String,
-  zipCode: String,
+const useraddressSchema = mongoose.Schema({
+  cityname: String,
+  zipcode: String,
   latitude: Number,
   longitude: Number,
 });
@@ -21,22 +21,22 @@ const tarifSchema = mongoose.Schema({
 });
 
 const reviewSchema = mongoose.Schema({
-  reviewNote: Number,
-  reviewText: String,
+  reviewnote: Number,
+  reviewtext: String,
 });
 
 const sitterSchema = mongoose.Schema({
   company: String,
-  lastName: String,
-  firstName: String,
+  lastname: String,
+  firstname: String,
   email: String,
   password: String,
   token: String,
-  phoneNumber: Number,
+  phonenumber: Number,
   gender: String,
-  userBio: String,
-  userPhoto: String,
-  userAddress: [userAddressSchema],
+  userbio: String,
+  userphoto: String,
+  useraddress: [useraddressSchema],
   active: Boolean,
   equipment: String,
   skills: [skillSchema],
