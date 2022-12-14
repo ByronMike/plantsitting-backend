@@ -53,6 +53,7 @@ router.post("/signup", (req, res) => {
           tarif3: 18,
         },
         reviews: {
+          author: "639708e76f11e2a75361c714",
           reviewnote: 10,
           reviewtext: "Top",
         },
@@ -70,26 +71,26 @@ router.post("/signup", (req, res) => {
   });
 });
 
-// //route de connexion
-// router.post("/signin", (req, res) => {
-//   if (!checkBody(req.body, ["email", "password"])) {
-//     res.json({ result: false, error: "Missing or empty fields" });
-//     return;
-//   }
+//route de connexion
+router.post("/signin", (req, res) => {
+  if (!checkBody(req.body, ["email", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
 
-//   User.findOne({
-//     email: { $regex: new RegExp(req.body.email, "i") },
-//   }).then((data) => {
-//     if (bcrypt.compareSync(req.body.password, data.password)) {
-//       res.json({
-//         result: true,
-//         token: data.token,
-//         email: data.email,
-//       });
-//     } else {
-//       res.json({ result: false, error: "User not found or wrong password" });
-//     }
-//   });
-// });
+  User.findOne({
+    email: { $regex: new RegExp(req.body.email, "i") },
+  }).then((data) => {
+    if (bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({
+        result: true,
+        token: data.token,
+        email: data.email,
+      });
+    } else {
+      res.json({ result: false, error: "User not found or wrong password" });
+    }
+  });
+});
 
 module.exports = router;
