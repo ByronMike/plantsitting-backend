@@ -28,11 +28,7 @@ router.post("/signup", (req, res) => {
         email: req.body.email,
         password: hash,
         token: uid2(32),
-<<<<<<< HEAD
-        phoneNumber: req.body.phonenumber,
-=======
         phoneNumber: Number(req.body.phoneNumber),
->>>>>>> assessment
         gender: "",
         userBio: "",
         userPhoto: "",
