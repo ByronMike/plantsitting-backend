@@ -95,6 +95,7 @@ router.post("/listsitters", (req, res) => {
       //$gte = il va matcher les éléments supérieur ou égal
       skills: { $elemMatch: { arrosage: { $gte: 50 } } },
     }).then((dataarrosage) => {
+<<<<<<< HEAD
       console.log(dataarrosage[0].email);
       if (dataarrosage[0]) {
         list.push({ ...dataarrosage[0] });
@@ -104,10 +105,16 @@ router.post("/listsitters", (req, res) => {
           result: true,
           data: dataarrosage,
         });
+=======
+      if (dataarrosage[0]) {
+        list.push({ ...dataarrosage[0] });
+        console.log("list 1er:", list);
+>>>>>>> ecd4d461a147b000f3bb8a7b799a40136472dc88
       }
     });
   }
 
+<<<<<<< HEAD
   //   if (entretien === "true") {
   //     Sitter.find({
   //       //$gte = il va matcher les éléments supérieur ou égal
@@ -124,6 +131,24 @@ router.post("/listsitters", (req, res) => {
   //     });
   //   }
   //   console.log("list", list);
+=======
+  if (entretien === "true") {
+    Sitter.find({
+      //$gte = il va matcher les éléments supérieur ou égal
+      skills: { $elemMatch: { entretien: { $gte: 50 } } },
+    }).then((dataentretien) => {
+      if (dataentretien[0]) {
+        list.push({ ...dataentretien[0] });
+        console.log("voir la liste de list", list);
+      }
+    });
+  } else {
+    res.json({
+      result: false,
+      error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
+    });
+  }
+>>>>>>> ecd4d461a147b000f3bb8a7b799a40136472dc88
 });
 
 // //Route d'affichage listing sitters en fonction
