@@ -21,15 +21,9 @@ const tarifSchema = mongoose.Schema({
 });
 
 const reviewSchema = mongoose.Schema({
-<<<<<<< HEAD
   author: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
   reviewnote: Number,
   reviewtext: String,
-=======
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "sitters" },
-  reviewNote: Number,
-  reviewText: String,
->>>>>>> assessment
 });
 
 const sitterSchema = mongoose.Schema({
