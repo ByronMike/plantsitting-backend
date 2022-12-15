@@ -7,11 +7,8 @@ require("./models/connection");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-<<<<<<< HEAD
 var sittersRouter = require("./routes/sitters");
-=======
 var assessmentRouter = require("./routes/assessment");
->>>>>>> assessment
 
 var app = express();
 
@@ -26,10 +23,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-<<<<<<< HEAD
 app.use("/sitters", sittersRouter);
-=======
 app.use("/assessment", assessmentRouter);
->>>>>>> assessment
 
 module.exports = app;
