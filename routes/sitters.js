@@ -30,7 +30,7 @@ router.post("/signup", (req, res) => {
         token: uid2(32),
         phonenumber: req.body.phonenumber,
         gender: "Mr",
-        userBio:
+        userbio:
           "Depuis 2011 je suis passioné de plantes exotiques et surtout la combination avec des fleurs et plantes vivaces.",
         userphoto: "",
         useraddress: {
@@ -58,7 +58,7 @@ router.post("/signup", (req, res) => {
           reviewtext: "Top",
         },
         rib: "mon rib",
-        status: "Plant-Sitter professionnel",
+        status: "Plant-Sitter Amateur",
       });
 
       newSitter.save().then((newDoc) => {
@@ -86,58 +86,47 @@ router.get("/allSitters", (req, res) => {
   });
 });
 
-// Route d'affichage listing sitters en fonction
-router.post("/listsitters", (req, res) => {
-  const { arrosage, entretien, traitement, autres } = req.body;
-  const list = [];
-  if (arrosage === "true") {
-    Sitter.find({
-      //$gte = il va matcher les éléments supérieur ou égal
-      skills: { $elemMatch: { arrosage: { $gte: 50 } } },
-    }).then((dataarrosage) => {
-      if (dataarrosage[0]) {
-        list.push({ ...dataarrosage[0] });
-        console.log("list 1er:", list);
-      }
-    });
-  }
+// Route d'affichage listing sitters en fonction des param de choix.
 
-  if (entretien === "true") {
-    Sitter.find({
-      //$gte = il va matcher les éléments supérieur ou égal
-      skills: { $elemMatch: { entretien: { $gte: 50 } } },
-    }).then((dataentretien) => {
-      if (dataentretien[0]) {
-        list.push({ ...dataentretien[0] });
-        console.log("voir la liste de list", list);
-      }
-    });
-  } else {
-    res.json({
-      result: false,
-      error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
-    });
+router.post("/listsitters", async (req, res) => {
+  const options = {};
+  //   const options = {
+  //     "skills.arrosage": {
+  //       $gte: 50,
+  //     },
+  //   };
+
+  if (req.body.arrosage === true) {
+    options["skills.arrosage"] = {
+      $gte: 50,
+    };
   }
+  if (req.body.entretien === true) {
+    options["skills.entretien"] = {
+      $gte: 50,
+    };
+  }
+  if (req.body.traitement === true) {
+    options["skills.traitement"] = {
+      $gte: 50,
+    };
+  }
+  if (req.body.autres === true) {
+    options["skills.autre"] = {
+      $gte: 50,
+    };
+  }
+  // L’opérateur $match sert pour filtrer les documents d’une collection.
+
+  const matchingSitters = await Sitter.aggregate([
+    {
+      $match: options,
+    },
+  ]);
+
+  res.json({ result: true, matchingSitters });
+
+  console.log("test", matchingSitters.result);
 });
-
-// //Route d'affichage listing sitters en fonction
-// router.post("/listsitters", (req, res) => {
-//   Sitter.find({
-//     //$gte = il va matcher les éléments supérieur ou égal
-//     skills: { $elemMatch: { arrosage: { $gte: 50 } } },
-//   }).then((data) => {
-//     if (data[0]) {
-//       res.json({
-//         result: true,
-//         data: data,
-//       });
-//     } else {
-//       res.json({
-//         result: false,
-//         error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
-//       });
-//     }
-//   });
-// });
 
 module.exports = router;
