@@ -30,7 +30,7 @@ router.post("/signup", (req, res) => {
         token: uid2(32),
         phonenumber: req.body.phonenumber,
         gender: "Mr",
-        userBio:
+        userbio:
           "Depuis 2011 je suis passioné de plantes exotiques et surtout la combination avec des fleurs et plantes vivaces.",
         userphoto: "",
         useraddress: {
@@ -58,7 +58,7 @@ router.post("/signup", (req, res) => {
           reviewtext: "Top",
         },
         rib: "mon rib",
-        status: "Plant-Sitter professionnel",
+        status: "Plant-Sitter Amateur",
       });
 
       newSitter.save().then((newDoc) => {
@@ -86,6 +86,7 @@ router.get("/allSitters", (req, res) => {
   });
 });
 
+<<<<<<< HEAD
 // Route d'affichage listing sitters en fonction
 router.post("/listsitters", (req, res) => {
   const { arrosage, entretien, traitement, autres } = req.body;
@@ -118,26 +119,49 @@ router.post("/listsitters", (req, res) => {
       error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
     });
   }
-});
+=======
+// Route d'affichage listing sitters en fonction des param de choix.
 
-// //Route d'affichage listing sitters en fonction
-// router.post("/listsitters", (req, res) => {
-//   Sitter.find({
-//     //$gte = il va matcher les éléments supérieur ou égal
-//     skills: { $elemMatch: { arrosage: { $gte: 50 } } },
-//   }).then((data) => {
-//     if (data[0]) {
-//       res.json({
-//         result: true,
-//         data: data,
-//       });
-//     } else {
-//       res.json({
-//         result: false,
-//         error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
-//       });
-//     }
-//   });
-// });
+router.post("/listsitters", async (req, res) => {
+  const options = {};
+  //   const options = {
+  //     "skills.arrosage": {
+  //       $gte: 50,
+  //     },
+  //   };
+
+  if (req.body.arrosage === true) {
+    options["skills.arrosage"] = {
+      $gte: 50,
+    };
+  }
+  if (req.body.entretien === true) {
+    options["skills.entretien"] = {
+      $gte: 50,
+    };
+  }
+  if (req.body.traitement === true) {
+    options["skills.traitement"] = {
+      $gte: 50,
+    };
+  }
+  if (req.body.autres === true) {
+    options["skills.autre"] = {
+      $gte: 50,
+    };
+  }
+  // L’opérateur $match sert pour filtrer les documents d’une collection.
+
+  const matchingSitters = await Sitter.aggregate([
+    {
+      $match: options,
+    },
+  ]);
+
+  res.json({ result: true, matchingSitters });
+
+  console.log("test", matchingSitters.result);
+>>>>>>> dd2f05ddec560856438e398a71e73ba840a8fc1b
+});
 
 module.exports = router;

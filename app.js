@@ -25,6 +25,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 <<<<<<< HEAD
+app.use("/assessment", assessmentRouter);
+=======
+<<<<<<< HEAD
+>>>>>>> bce1a192ef6f7054e5d3fc70be6ae327dba2f8f3
 app.use("/sitters", sittersRouter);
 app.use("/assessment", assessmentRouter);
 =======
