@@ -5,16 +5,7 @@ const mongoose = require("mongoose");
 const Sitter = require("../models/sitters");
 const User = require("../models/users");
 
-router.get("/aaa", function (req, res, next) {
-  console.log("lmk");
-  res.json({ title: "Express" });
-});
-router.post("/bbb", function (req, res, next) {
-  console.log(req.body);
-  res.json({ title: "Express" });
-});
-
-router.post("/test", async (req, res) => {
+router.post("/save", async (req, res) => {
   console.log(req.body);
   const foundUser = await User.findOne({ token: req.body.userstoken });
   console.log("foundUserr", foundUser);
