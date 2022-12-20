@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const Sitter = require("../models/sitters");
+const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 const bcrypt = require("bcrypt");
 const uid2 = require("uid2");
@@ -139,6 +140,21 @@ router.get("/sitterProfile/:token", (req, res) => {
       return;
     } else {
       res.json({ result: true, sitter });
+    }
+  });
+});
+
+router.get("/reviewsBySitter/:token", (req, res) => {
+  Sitter.findOne({ token: req.params.token })
+  // populate va ici chercher à remplacer author qui est à l'intérieur d'un objet, dans le tableau reviews
+  .populate("reviews.author")
+  .then((sitter) => {
+    // console.log("sitter",sitter.reviews)
+    if (!sitter) {
+      res.json({ result: false, error: "Sitter not found" });
+      return;
+    } else {
+      res.json({ result: true, reviews: sitter.reviews });
     }
   });
 });
