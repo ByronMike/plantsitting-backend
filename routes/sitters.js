@@ -86,47 +86,38 @@ router.get("/allSitters", (req, res) => {
   });
 });
 
-// Route d'affichage listing sitters en fonction des param de choix.
-
-router.post("/listsitters", async (req, res) => {
-  const options = {};
-  //   const options = {
-  //     "skills.arrosage": {
-  //       $gte: 50,
-  //     },
-  //   };
-
-  if (req.body.arrosage === true) {
-    options["skills.arrosage"] = {
-      $gte: 50,
-    };
+// Route d'affichage listing sitters en fonction
+router.post("/listsitters", (req, res) => {
+  const { arrosage, entretien, traitement, autres } = req.body;
+  const list = [];
+  if (arrosage === "true") {
+    Sitter.find({
+      //$gte = il va matcher les éléments supérieur ou égal
+      skills: { $elemMatch: { arrosage: { $gte: 50 } } },
+    }).then((dataarrosage) => {
+      if (dataarrosage[0]) {
+        list.push({ ...dataarrosage[0] });
+        console.log("list 1er:", list);
+      }
+    });
   }
-  if (req.body.entretien === true) {
-    options["skills.entretien"] = {
-      $gte: 50,
-    };
-  }
-  if (req.body.traitement === true) {
-    options["skills.traitement"] = {
-      $gte: 50,
-    };
-  }
-  if (req.body.autres === true) {
-    options["skills.autre"] = {
-      $gte: 50,
-    };
-  }
-  // L’opérateur $match sert pour filtrer les documents d’une collection.
 
-  const matchingSitters = await Sitter.aggregate([
-    {
-      $match: options,
-    },
-  ]);
-
-  res.json({ result: true, matchingSitters });
-
-  console.log("test", matchingSitters.result);
+  if (entretien === "true") {
+    Sitter.find({
+      //$gte = il va matcher les éléments supérieur ou égal
+      skills: { $elemMatch: { entretien: { $gte: 50 } } },
+    }).then((dataentretien) => {
+      if (dataentretien[0]) {
+        list.push({ ...dataentretien[0] });
+        console.log("voir la liste de list", list);
+      }
+    });
+  } else {
+    res.json({
+      result: false,
+      error: "Il y a aucun Plant-Sitter qui correspond à la recherche",
+    });
+  }
 });
 
 module.exports = router;

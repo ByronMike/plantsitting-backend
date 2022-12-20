@@ -10,8 +10,13 @@ var usersRouter = require("./routes/users");
 var sittersRouter = require("./routes/sitters");
 var assessmentRouter = require("./routes/assessment");
 var messagesRouter = require("./routes/messages");
+var cameraRouter = require("./routes/camera");
+var vintedRouter = require("./routes/vinteds");
 
 var app = express();
+
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 
 const cors = require("cors");
 app.use(cors());
@@ -24,11 +29,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/assessment", assessmentRouter);
-app.use("/sitters", sittersRouter);
-app.use("/assessment", assessmentRouter);
 app.use("/sistters", sittersRouter);
 app.use("/assessment", assessmentRouter);
 app.use("/messages", messagesRouter);
+app.use("/camera", cameraRouter);
+app.use("/vinteds", vintedRouter);
 
 module.exports = app;
