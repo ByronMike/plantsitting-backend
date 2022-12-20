@@ -71,6 +71,29 @@ router.post("/signup", (req, res) => {
   });
 });
 
+//route de connexion
+router.post("/signin", (req, res) => {
+  console.log(req.body);
+  if (!checkBody(req.body, ["email", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  Sitter.findOne({
+    email: { $regex: new RegExp(req.body.email, "i") },
+  }).then((data) => {
+    if (bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({
+        result: true,
+        token: data.token,
+        email: data.email,
+      });
+    } else {
+      res.json({ result: false, error: "User not found or wrong password" });
+    }
+  });
+});
+
 //Route d'affichage de tous les sitters
 
 router.get("/allSitters", (req, res) => {
@@ -90,11 +113,6 @@ router.get("/allSitters", (req, res) => {
 
 router.post("/listsitters", async (req, res) => {
   const options = {};
-  //   const options = {
-  //     "skills.arrosage": {
-  //       $gte: 50,
-  //     },
-  //   };
 
   if (req.body.arrosage === true) {
     options["skills.arrosage"] = {
@@ -126,7 +144,31 @@ router.post("/listsitters", async (req, res) => {
 
   res.json({ result: true, matchingSitters });
 
-  console.log("test", matchingSitters.result);
+  console.log("Voici les résultats", matchingSitters);
+});
+
+// Route affichage moyenne note
+
+router.get("/average", (req, res) => {
+  Sitter.aggregate(
+    [
+      { $match: { lastname: req.body.lastname } },
+      { $unwind: "$reviews" },
+      {
+        $group: {
+          _id: null,
+          avg_val: { $avg: "$reviews.reviewnote" },
+        },
+      },
+    ],
+    (err, result) => {
+      if (err) {
+        res.json({ error: err });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 });
 
 module.exports = router;
