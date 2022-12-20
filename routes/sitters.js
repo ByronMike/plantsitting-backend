@@ -133,18 +133,8 @@ router.post("/listsitters", async (req, res) => {
   console.log("test", matchingSitters.result);
 });
 
-router.get("/sitterProfile/:token", (req, res) => {
-  Sitter.findOne({ token: req.params.token }).then((sitter) => {
-    if (!sitter) {
-      res.json({ result: false, error: "Sitter not found" });
-      return;
-    } else {
-      res.json({ result: true, sitter });
-    }
-  });
-});
 
-router.get("/reviewsBySitter/:token", (req, res) => {
+router.get("/sitterProfile/:token", (req, res) => {
   Sitter.findOne({ token: req.params.token })
   // populate va ici chercher à remplacer author qui est à l'intérieur d'un objet, dans le tableau reviews
   .populate("reviews.author")
@@ -154,7 +144,7 @@ router.get("/reviewsBySitter/:token", (req, res) => {
       res.json({ result: false, error: "Sitter not found" });
       return;
     } else {
-      res.json({ result: true, reviews: sitter.reviews });
+      res.json({ result: true, sitter});
     }
   });
 });
