@@ -55,7 +55,10 @@ router.post("/signup", (req, res) => {
         reviews: {
           author: "639708e76f11e2a75361c714",
           reviewnote: 10,
-          reviewtext: "Top",
+          reviewtitle: "Top",
+          reviewtext:
+            "Super prestation, le plant-sitter s'est bien occupé de mes plantes pendant toute la durée de mes vacances. ",
+          createdAt: new Date(),
         },
         rib: "mon rib",
         status: "Plant-Sitter Amateur",
@@ -127,6 +130,17 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, matchingSitters });
 
   console.log("test", matchingSitters.result);
+});
+
+router.get("/sitterProfile/:token", (req, res) => {
+  Sitter.findOne({ token: req.params.token }).then((sitter) => {
+    if (!sitter) {
+      res.json({ result: false, error: "Sitter not found" });
+      return;
+    } else {
+      res.json({ result: true, sitter });
+    }
+  });
 });
 
 module.exports = router;
