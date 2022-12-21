@@ -22,42 +22,37 @@ router.post("/signup", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newSitter = new Sitter({
-        company: "myCompanyName",
+        company: "",
         lastname: req.body.lastname,
         firstname: req.body.firstname,
         email: req.body.email,
         password: hash,
         token: uid2(32),
         phonenumber: req.body.phonenumber,
-        gender: "Mr",
-        userbio:
-          "Depuis 2011 je suis passioné de plantes exotiques et surtout la combination avec des fleurs et plantes vivaces.",
+        gender: "",
+        userbio: req.body.userbio,
         userphoto: "",
         useraddress: {
-          cityname: "Marseille",
-          zipcode: 13001,
+          cityname: req.body.cityname,
+          zipcode: req.body.codepostal,
           latitude: 45.751036,
           longitude: 4.840246,
         },
         active: true,
-        equipement: "semi-amateur",
+        equipement: req.body.equipement,
         skills: {
-          arrosage: 95,
-          entretien: 80,
-          traitement: 60,
-          autres: 30,
+          arrosage: req.body.arrosage,
+          entretien: req.body.arrosage,
+          traitement: req.body.arrosage,
+          autres: req.body.autres,
         },
         tarifs: {
-          tarif1: 8,
-          tarif2: 14,
-          tarif3: 18,
+          tarif1: req.body.tarif1,
+          tarif2: req.body.tarif2,
+          tarif3: req.body.tarif3,
         },
-        reviews: {
-          author: "639708e76f11e2a75361c714",
-          reviewnote: 10,
-          reviewtext: "Top",
-        },
-        rib: "mon rib",
+        reviews: {},
+        rib: req.body.rib,
         status: "Plant-Sitter Amateur",
       });
 
@@ -142,7 +137,6 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
-<<<<<<< HEAD
   // Calcule de la note moyenne des commentaires
   const sittersNote = await Sitter.aggregate([
     { $match: { active: true } },
@@ -160,7 +154,8 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
-  // fonction pour merge les 2 tableaux d'objects via l'ID.
+  // console.log("test");
+  // // fonction pour merge les 2 tableaux d'objects via l'ID.
   function mergeArrayObjects(arr1, arr2) {
     return arr1.map((item, i) => {
       if (item.id === arr2[i].id) {
@@ -176,35 +171,6 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
-=======
-  res.json({ result: true, matchingSitters });
-
-  console.log("Voici les résultats", matchingSitters);
-});
-
-// Route affichage moyenne note
-
-router.get("/average", (req, res) => {
-  Sitter.aggregate(
-    [
-      { $match: { lastname: req.body.lastname } },
-      { $unwind: "$reviews" },
-      {
-        $group: {
-          _id: null,
-          avg_val: { $avg: "$reviews.reviewnote" },
-        },
-      },
-    ],
-    (err, result) => {
-      if (err) {
-        res.json({ error: err });
-      } else {
-        res.json(result);
-      }
-    }
-  );
->>>>>>> planti
 });
 
 module.exports = router;
