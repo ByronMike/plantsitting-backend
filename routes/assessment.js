@@ -15,8 +15,9 @@ router.post("/save", async (req, res) => {
     {
       $push: {
         reviews: {
-          reviewnote: Number(req.body.note),
-          reviewtext: req.body.text,
+          reviewNote: Number(req.body.note),
+          reviewTitle: req.body.title,
+          reviewText: req.body.text,
           author: mongoose.Types.ObjectId(foundUser._id),
         },
       },

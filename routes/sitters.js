@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const Sitter = require("../models/sitters");
+const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 const bcrypt = require("bcrypt");
 const uid2 = require("uid2");
@@ -55,7 +56,10 @@ router.post("/signup", (req, res) => {
         reviews: {
           author: "639708e76f11e2a75361c714",
           reviewnote: 10,
-          reviewtext: "Top",
+          reviewtitle: "Top",
+          reviewtext:
+            "Super prestation, le plant-sitter s'est bien occupé de mes plantes pendant toute la durée de mes vacances. ",
+          createdAt: new Date(),
         },
         rib: "mon rib",
         status: "Plant-Sitter Amateur",
@@ -142,7 +146,6 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
-<<<<<<< HEAD
   // Calcule de la note moyenne des commentaires
   const sittersNote = await Sitter.aggregate([
     { $match: { active: true } },
@@ -176,35 +179,22 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
-=======
-  res.json({ result: true, matchingSitters });
-
-  console.log("Voici les résultats", matchingSitters);
 });
 
-// Route affichage moyenne note
 
-router.get("/average", (req, res) => {
-  Sitter.aggregate(
-    [
-      { $match: { lastname: req.body.lastname } },
-      { $unwind: "$reviews" },
-      {
-        $group: {
-          _id: null,
-          avg_val: { $avg: "$reviews.reviewnote" },
-        },
-      },
-    ],
-    (err, result) => {
-      if (err) {
-        res.json({ error: err });
-      } else {
-        res.json(result);
-      }
+router.get("/sitterProfile/:token", (req, res) => {
+  Sitter.findOne({ token: req.params.token })
+  // populate va ici chercher à remplacer author qui est à l'intérieur d'un objet, dans le tableau reviews
+  .populate("reviews.author")
+  .then((sitter) => {
+    // console.log("sitter",sitter.reviews)
+    if (!sitter) {
+      res.json({ result: false, error: "Sitter not found" });
+      return;
+    } else {
+      res.json({ result: true, sitter});
     }
-  );
->>>>>>> planti
+  });
 });
 
 module.exports = router;
