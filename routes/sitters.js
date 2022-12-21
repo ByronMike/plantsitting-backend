@@ -142,33 +142,39 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
-  res.json({ result: true, matchingSitters });
+  // Calcule de la note moyenne des commentaires
+  const sittersNote = await Sitter.aggregate([
+    { $match: { active: true } },
 
-  console.log("Voici les résultats", matchingSitters);
-});
+    //tableau de sous-documents avec $unwind
 
-// Route affichage moyenne note
-
-router.get("/average", (req, res) => {
-  Sitter.aggregate(
-    [
-      { $match: { lastname: req.body.lastname } },
-      { $unwind: "$reviews" },
-      {
-        $group: {
-          _id: null,
-          avg_val: { $avg: "$reviews.reviewnote" },
-        },
+    { $unwind: "$reviews" },
+    {
+      //utilisons $group pour calculer la moyenne des notes
+      $group: {
+        _id: "$_id",
+        // opérateur $avg pour calculer la moyenne
+        average: { $avg: "$reviews.reviewNote" },
       },
-    ],
-    (err, result) => {
-      if (err) {
-        res.json({ error: err });
-      } else {
-        res.json(result);
+    },
+  ]);
+
+  // fonction pour merge les 2 tableaux d'objects via l'ID.
+  function mergeArrayObjects(arr1, arr2) {
+    return arr1.map((item, i) => {
+      if (item.id === arr2[i].id) {
+        //merging two objects
+        return Object.assign({}, item, arr2[i]);
       }
-    }
-  );
+    });
+  }
+
+  const sittersWithAverage = mergeArrayObjects(matchingSitters, sittersNote);
+
+  console.log(JSON.stringify(mergeArrayObjects(matchingSitters, sittersNote)));
+  res.json({ result: true, sittersWithAverage });
+
+  // console.log("Voici les résultats", matchingSitters, sittersNote);
 });
 
 module.exports = router;
