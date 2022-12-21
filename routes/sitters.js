@@ -142,6 +142,7 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
+<<<<<<< HEAD
   // Calcule de la note moyenne des commentaires
   const sittersNote = await Sitter.aggregate([
     { $match: { active: true } },
@@ -175,6 +176,35 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
+=======
+  res.json({ result: true, matchingSitters });
+
+  console.log("Voici les résultats", matchingSitters);
+});
+
+// Route affichage moyenne note
+
+router.get("/average", (req, res) => {
+  Sitter.aggregate(
+    [
+      { $match: { lastname: req.body.lastname } },
+      { $unwind: "$reviews" },
+      {
+        $group: {
+          _id: null,
+          avg_val: { $avg: "$reviews.reviewnote" },
+        },
+      },
+    ],
+    (err, result) => {
+      if (err) {
+        res.json({ error: err });
+      } else {
+        res.json(result);
+      }
+    }
+  );
+>>>>>>> planti
 });
 
 module.exports = router;
