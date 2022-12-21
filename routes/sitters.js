@@ -181,4 +181,19 @@ router.post("/listsitters", async (req, res) => {
   // console.log("Voici les résultats", matchingSitters, sittersNote);
 });
 
+router.get("/sitterProfile/:token", (req, res) => {
+  Sitter.findOne({ token: req.params.token })
+    // populate va ici chercher à remplacer author qui est à l'intérieur d'un objet, dans le tableau reviews
+    .populate("reviews.author")
+    .then((sitter) => {
+      // console.log("sitter",sitter.reviews)
+      if (!sitter) {
+        res.json({ result: false, error: "Sitter not found" });
+        return;
+      } else {
+        res.json({ result: true, sitter });
+      }
+    });
+});
+
 module.exports = router;
