@@ -3,6 +3,7 @@ var router = express.Router();
 
 require("../models/connection");
 const Sitter = require("../models/sitters");
+const User = require("../models/users");
 const { checkBody } = require("../modules/checkBody");
 const bcrypt = require("bcrypt");
 const uid2 = require("uid2");
@@ -22,40 +23,42 @@ router.post("/signup", (req, res) => {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
       const newSitter = new Sitter({
-        company: "myCompanyName",
+        company: "",
         lastname: req.body.lastname,
         firstname: req.body.firstname,
         email: req.body.email,
         password: hash,
         token: uid2(32),
         phonenumber: req.body.phonenumber,
-        gender: "Mr",
-        userbio:
-          "Depuis 2011 je suis passioné de plantes exotiques et surtout la combination avec des fleurs et plantes vivaces.",
+        gender: "",
+        userbio: req.body.userbio,
         userphoto: "",
         useraddress: {
-          cityname: "Marseille",
-          zipcode: 13001,
+          cityname: req.body.cityname,
+          zipcode: req.body.codepostal,
           latitude: 45.751036,
           longitude: 4.840246,
         },
         active: true,
-        equipement: "semi-amateur",
+        equipement: req.body.equipement,
         skills: {
-          arrosage: 95,
-          entretien: 80,
-          traitement: 60,
-          autres: 30,
+          arrosage: req.body.arrosage,
+          entretien: req.body.arrosage,
+          traitement: req.body.arrosage,
+          autres: req.body.autres,
         },
         tarifs: {
-          tarif1: 8,
-          tarif2: 14,
-          tarif3: 18,
+          tarif1: req.body.tarif1,
+          tarif2: req.body.tarif2,
+          tarif3: req.body.tarif3,
         },
         reviews: {
           author: "639708e76f11e2a75361c714",
           reviewnote: 10,
-          reviewtext: "Top",
+          reviewtitle: "Top",
+          reviewtext:
+            "Super prestation, le plant-sitter s'est bien occupé de mes plantes pendant toute la durée de mes vacances. ",
+          createdAt: new Date(),
         },
         rib: "mon rib",
         status: "Plant-Sitter Amateur",
@@ -159,7 +162,8 @@ router.post("/listsitters", async (req, res) => {
     },
   ]);
 
-  // fonction pour merge les 2 tableaux d'objects via l'ID.
+  // console.log("test");
+  // // fonction pour merge les 2 tableaux d'objects via l'ID.
   function mergeArrayObjects(arr1, arr2) {
     return arr1.map((item, i) => {
       if (item.id === arr2[i].id) {
@@ -175,6 +179,24 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
+<<<<<<< HEAD
+=======
+});
+
+router.get("/sitterProfile/:token", (req, res) => {
+  Sitter.findOne({ token: req.params.token })
+    // populate va ici chercher à remplacer author qui est à l'intérieur d'un objet, dans le tableau reviews
+    .populate("reviews.author")
+    .then((sitter) => {
+      // console.log("sitter",sitter.reviews)
+      if (!sitter) {
+        res.json({ result: false, error: "Sitter not found" });
+        return;
+      } else {
+        res.json({ result: true, sitter });
+      }
+    });
+>>>>>>> 7d1b08bb22bc99568a0925e0fe18643d324c0709
 });
 
 module.exports = router;
