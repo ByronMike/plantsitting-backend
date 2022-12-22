@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const mongoose = require("mongoose");
 
 require("../models/connection");
 const Sitter = require("../models/sitters");
@@ -35,11 +36,14 @@ router.post("/newservice", async (req, res) => {
     },
     photoStart: "",
     photoEnd: "",
-    date: req.body.date,
+    startday: req.body.date,
+    endday: req.body.date,
+    depot: req.body.tarifdepot,
+    garde: req.body.garde,
   });
 
-  newService.save().then((newDoc) => {
-    res.json({ result: true, info: newDoc });
+  newService.save().then((data) => {
+    res.json({ result: true, info: data });
   });
 });
 

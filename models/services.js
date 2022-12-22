@@ -28,7 +28,10 @@ const serviceSchema = mongoose.Schema({
   location: [locationSchema],
   photoStart: String,
   photoEnd: String,
-  date: Date,
+  startday: Date,
+  endday: Date,
+  depot: Boolean,
+  garde: Boolean,
 });
 
 const Service = mongoose.model("services", serviceSchema);
