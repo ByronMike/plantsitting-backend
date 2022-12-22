@@ -175,7 +175,7 @@ router.post("/listsitters", async (req, res) => {
 
   const sittersWithAverage = mergeArrayObjects(matchingSitters, sittersNote);
 
-  console.log(JSON.stringify(mergeArrayObjects(matchingSitters, sittersNote)));
+  // console.log(JSON.stringify(mergeArrayObjects(matchingSitters, sittersNote)));
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
