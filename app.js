@@ -12,6 +12,7 @@ var assessmentRouter = require("./routes/assessment");
 var messagesRouter = require("./routes/messages");
 var cameraRouter = require("./routes/camera");
 var vintedRouter = require("./routes/vinteds");
+var servicesRouter = require("./routes/services");
 
 var app = express();
 
@@ -34,5 +35,6 @@ app.use("/assessment", assessmentRouter);
 app.use("/messages", messagesRouter);
 app.use("/camera", cameraRouter);
 app.use("/vinteds", vintedRouter);
+app.use("/services", servicesRouter);
 
 module.exports = app;

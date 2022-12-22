@@ -179,8 +179,6 @@ router.post("/listsitters", async (req, res) => {
   res.json({ result: true, sittersWithAverage });
 
   // console.log("Voici les résultats", matchingSitters, sittersNote);
-<<<<<<< HEAD
-=======
 });
 
 router.get("/sitterProfile/:token", (req, res) => {
@@ -196,7 +194,6 @@ router.get("/sitterProfile/:token", (req, res) => {
         res.json({ result: true, sitter });
       }
     });
->>>>>>> 7d1b08bb22bc99568a0925e0fe18643d324c0709
 });
 
 module.exports = router;
